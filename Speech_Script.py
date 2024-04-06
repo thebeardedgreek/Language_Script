@@ -173,7 +173,6 @@ else:
     engine.runAndWait()
 
 # Options after speech is given
-# Options after speech is given
 while True:
     try:
         option = int(input("Options:\n1. Save audio to file\n2. Speak another text\n3. Quit\nChoose an option (1/2/3): "))
