@@ -16,7 +16,10 @@ def list_available_languages():
         languages = voice.languages
         if languages:
             available_languages.update(languages)
-    return available_languages
+    if available_languages:
+        return available_languages
+    else:
+        return None
 
 def list_available_voices():
     available_voices = []
@@ -49,13 +52,11 @@ def repeat_text(text, repeat):
 
 def on_submit():
     text = entry_text.get()
-    language = combo_language.get()
     voice = combo_voice.get()
     rate = float(entry_rate.get())
-    volume = float(entry_volume.get())
+    volume = float(entry_volume.get()) / 10  # Scale the volume level to be between 0.1 and 1.0
     filename = entry_filename.get()
 
-    set_language(language)
     set_voice(voice)
     set_speech_effects(rate, volume)
 
@@ -75,44 +76,50 @@ def on_submit():
 root = tk.Tk()
 root.title("Text-to-Speech Customizer")
 
-label_text = tk.Label(root, text="Enter the text:")
-label_text.grid(row=0, column=0, sticky="w")
-entry_text = tk.Entry(root, width=50)
-entry_text.grid(row=0, column=1, columnspan=2)
+# Padding between the words and selection areas and the sides of the GUI
+pad_x = 20
+pad_y = (10, 5)
 
-label_language = tk.Label(root, text="Choose language:")
-label_language.grid(row=1, column=0, sticky="w")
+label_text = tk.Label(root, text="Enter the text:")
+label_text.grid(row=0, column=0, sticky="w", padx=pad_x, pady=pad_y)
+entry_text = tk.Entry(root, width=50)
+entry_text.grid(row=0, column=1, columnspan=2, padx=pad_x, pady=pad_y)
+
+# Check if there are available languages
 languages = list_available_languages()
-combo_language = ttk.Combobox(root, values=languages)
-combo_language.grid(row=1, column=1)
+if languages:
+    label_language = tk.Label(root, text="Choose language:")
+    label_language.grid(row=1, column=0, sticky="w", padx=pad_x, pady=pad_y)
+    combo_language = ttk.Combobox(root, values=languages)
+    combo_language.grid(row=1, column=1, padx=pad_x, pady=pad_y)
 
 label_voice = tk.Label(root, text="Choose voice:")
-label_voice.grid(row=2, column=0, sticky="w")
+label_voice.grid(row=2, column=0, sticky="w", padx=pad_x, pady=pad_y)
 voices = list_available_voices()
 combo_voice = ttk.Combobox(root, values=voices)
-combo_voice.grid(row=2, column=1)
+combo_voice.grid(row=2, column=1, padx=pad_x, pady=pad_y)
 
 label_rate = tk.Label(root, text="Enter speech rate (words per minute):")
-label_rate.grid(row=3, column=0, sticky="w")
+label_rate.grid(row=3, column=0, sticky="w", padx=pad_x, pady=pad_y)
 entry_rate = tk.Entry(root)
-entry_rate.grid(row=3, column=1)
+entry_rate.grid(row=3, column=1, padx=pad_x, pady=pad_y)
 
-label_volume = tk.Label(root, text="Enter volume level (0.0 to 1.0):")
-label_volume.grid(row=4, column=0, sticky="w")
+label_volume = tk.Label(root, text="Enter volume level (1 to 10):")
+label_volume.grid(row=4, column=0, sticky="w", padx=pad_x, pady=pad_y)
 entry_volume = tk.Entry(root)
-entry_volume.grid(row=4, column=1)
+entry_volume.grid(row=4, column=1, padx=pad_x, pady=pad_y)
 
 label_filename = tk.Label(root, text="Enter filename (without extension):")
-label_filename.grid(row=5, column=0, sticky="w")
+label_filename.grid(row=5, column=0, sticky="w", padx=pad_x, pady=pad_y)
 entry_filename = tk.Entry(root)
-entry_filename.grid(row=5, column=1)
+entry_filename.grid(row=5, column=1, padx=pad_x, pady=pad_y)
 
 label_repeat = tk.Label(root, text="Enter the number of times to repeat:")
-label_repeat.grid(row=6, column=0, sticky="w")
+label_repeat.grid(row=6, column=0, sticky="w", padx=pad_x, pady=pad_y)
 entry_repeat = tk.Entry(root)
-entry_repeat.grid(row=6, column=1)
+entry_repeat.grid(row=6, column=1, padx=pad_x, pady=pad_y)
 
 button_submit = tk.Button(root, text="Submit", command=on_submit)
-button_submit.grid(row=7, column=0, columnspan=2)
+button_submit.grid(row=7, column=0, columnspan=2, padx=pad_x, pady=pad_y)
 
 root.mainloop()
